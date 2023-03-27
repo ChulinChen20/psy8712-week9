@@ -61,12 +61,13 @@ upvotes <- rstats_html %>%
 # the real number of upvotes seems to by every three elements start from position 2
 upvotes<- upvotes[seq(2,length(upvotes),3)]
 
-# scrap number of comments
+# scrap number of comments, extract number, replace na with o
 comments <- rstats_html %>% 
   html_elements(css='.comments') %>%
   html_text() %>%
   str_remove_all("\\D") %>%
-  as.numeric()
+  as.numeric() %>%
+  replace_na(0)
 
 # combine the three variables into a tibble
 rstats_tbl <-tibble(post,upvotes,comments)
@@ -96,7 +97,7 @@ corr <-  sub("^0+", "", corr)
 paste("The correlation between upvotes and comments was r(", corr[3],") = ",corr[1],", p = ",corr[2],". This test was not statistically significant.", sep="")
 
 # Publication
-"The correlation between upvotes and comments was r(21) = c(cor = 0.16), p = .48. This test was not statistically significant."
+"The correlation between upvotes and comments was r(23) = c(cor = 0.16), p = .45. This test was not statistically significant."
 
 
 
