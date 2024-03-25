@@ -9,13 +9,13 @@ cnbc_html <- read_html("https://www.cnbc.com")
 # define a function to scrape headlines and calculate length for one section
 get_headlines <- function(section_url, source) {
   section_html <- read_html(section_url)
-  headlines <- section_html %>% 
+  headline <- section_html %>% 
     html_elements(css='.TrendingNowItem-title , .Card-title') %>%
     html_text()
-  length = str_count(headlines, "\\S+")
+  length = str_count(headline, "\\S+")
   
   # combine the three variables into a tibble
-  cnbc_tbl <-tibble(headlines,length,source)
+  cnbc_tbl <-tibble(headline,length,source)
   
   return(cnbc_tbl)
 }
