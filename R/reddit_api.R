@@ -22,13 +22,13 @@ rstats_tbl %>%
   geom_point()
 
 # Analysis
-# create two new variables from result of cor.test
-correlation <- rstats_tbl %>%
-  summarize(coef = cor.test(upvotes,comments)$estimate,
-            p_value = cor.test(upvotes,comments)$p.value)
+# perform and store the result of cor.test
+vote_comment_corr <- cor.test(
+  rstats_tbl$upvotes,
+  rstats_tbl$comments
+)
 
-# Display correlation
-correlation
+vote_comment_corr
 
 # combine the rounded coefficient and p-value and the degrees of freedom
 corr <- c(round(correlation,2),cor.test(rstats_tbl$upvotes,rstats_tbl$comments)$parameter)
@@ -37,11 +37,14 @@ corr <- c(round(correlation,2),cor.test(rstats_tbl$upvotes,rstats_tbl$comments)$
 corr <-  sub("^0+", "", corr) 
 
 # paste strings and the dynamic values together
-paste("The correlation between upvotes and comments was r(", corr[3],") = ",corr[1],", p = ",corr[2],". This test was not statistically significant.", sep="")
+paste("The correlation between upvotes and comments was r(", vote_comment_corr$parameter,") = ",
+      str_remove(format(round(vote_comment_corr$estimate,2),nsmall = 2),"^0"),
+      ", p = ",str_remove(format(round(vote_comment_corr$p.value,2),nsmall = 2),"^0"),
+      ". This test ", ifelse(vote_comment_corr$p.value <= 0.05, "was","was not"),
+      " statistically significant.", sep="")
 
 # Publication
-"The correlation between upvotes and comments was r(23) = .17, p = .42. This test was not statistically significant."
-
+"The correlation between upvotes and comments was r(23) = .20, p = .33. This test was not statistically significant."
 
 # Data Import and Cleaning
 # download html data from the link
